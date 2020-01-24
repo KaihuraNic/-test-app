@@ -23,4 +23,12 @@ public class SurveyViewModel extends AndroidViewModel {
     public LiveData<List<Survey>> getTaken() {
         return surveyRepository.getTakenSurveys();
     }
+
+    public void seedDb() {
+        surveyRepository.seedDb();
+    }
+
+    public void getSurveyByName(String title) {
+        surveyRepository.getByName(title);
+    }
 }

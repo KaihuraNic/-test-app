@@ -21,8 +21,11 @@ public interface ServeyDao {
     LiveData<List<Survey>> getTakenSurveys();
 
     @Query("update survey set status =:status where id =:surveyId")
-    void updateServey(int status, int surveyId);
+    void updateServey(int status, String surveyId);
 
-    @Query("select * from survey where syctatus =:status limit 1")
+    @Query("select * from survey where syncStatus =:status limit 1")
     Survey fetchForSyc(int status);
+
+    @Query("select * from survey where title =:title")
+    Survey getByName(String title);
 }

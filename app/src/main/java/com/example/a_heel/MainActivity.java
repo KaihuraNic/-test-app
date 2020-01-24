@@ -3,6 +3,8 @@ package com.example.a_heel;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SyncStats;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.a_heel.adapters.SurveyListAdapter;
 import com.example.a_heel.models.Survey;
+import com.example.a_heel.models.UserProfile;
+import com.example.a_heel.sync.SyncService;
 import com.example.a_heel.viewModels.SurveyViewModel;
 import com.google.gson.Gson;
 
@@ -25,14 +29,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
     private SurveyViewModel surveyViewModel;
     private SurveyListAdapter surveyListAdapter;
     private List<Survey> surveys;
     private final static int TAKEN_SURVEY = 1;
     private final static String TAKEN_SURVEYS = "Taken Surveys";
-    private final static String PENDING_SURVEYS = "Taken Surveys";
+    private final static String PENDING_SURVEYS = "Pending Surveys";
     List<Survey> pending = new ArrayList<>();
     List<Survey> taken = new ArrayList<>();
 
@@ -48,29 +52,55 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+
+
         surveyViewModel = ViewModelProviders.of(MainActivity.this).get(SurveyViewModel.class);
+
+        surveyViewModel.seedDb();
 
         surveyViewModel.getTaken().observe(MainActivity.this, new Observer<List<Survey>>() {
             @Override
             public void onChanged(List<Survey> data) {
                 for (Survey survey : data) {
-                    if (survey.getStatus() != TAKEN_SURVEY) {
-                        pending.add(survey);
-                    } else {
+                    if (survey.getStatus() == TAKEN_SURVEY) {
                         taken.add(survey);
+                    } else {
+                        pending.add(survey);
                     }
                 }
             }
         });
+
+        findViewById(R.id.peinding_bt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedTitle.setText(PENDING_SURVEYS);
+                updateUi(pending);
+            }
+        });
+
+        findViewById( R.id.taken_bt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedTitle.setText(TAKEN_SURVEYS);
+                updateUi(taken);
+            }
+        });
+
+        Intent intent =  new Intent(MainActivity.this, SyncService.class);
+        startService(intent);
     }
 
     private void updateUi(List<Survey> data) {
         surveyListAdapter = new SurveyListAdapter(MainActivity.this, data, new SurveyListAdapter.OnItemClickListener() {
             @Override
             public void onTransactionClick(Survey survey) {
-                Intent intent = new Intent(MainActivity.this, QuestionBaseActivity.class);
-                intent.putExtra("status", new Gson().toJson(survey));
-                startActivity(intent);
+                if (survey.getId() != TAKEN_SURVEY) {
+                    Intent intent = new Intent(MainActivity.this, UserProfileAcivity.class);
+                    surveyViewModel.getSurveyByName(survey.getTitle());
+                    intent.putExtra("content", new Gson().toJson(survey));
+                    startActivity(intent);
+                }
             }
         });
         surveyRecyclerview.setAdapter(surveyListAdapter);
@@ -78,17 +108,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         surveyListAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.peinding_bt:
-                selectedTitle.setText(PENDING_SURVEYS);
-                updateUi(pending);
-                break;
-            case R.id.taken_bt:
-                selectedTitle.setText(TAKEN_SURVEYS);
-                updateUi(taken);
-                break;
-        }
-    }
 }

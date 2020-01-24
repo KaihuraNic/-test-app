@@ -19,11 +19,11 @@ public class QuestionsViewModel extends AndroidViewModel {
         questionsRepositiry = new QuestionsRepository(application);
     }
 
-    public List<Question> getContextQuestions(int surveyId) {
+    public List<Question> getContextQuestions(String surveyId) {
         return questionsRepositiry.getQuestions(surveyId);
     }
 
-    public List<Question> fetchReview(int surveyId) {
+    public List<Question> fetchReview(String surveyId) {
         return questionsRepositiry.fetchReciew(surveyId);
     }
 

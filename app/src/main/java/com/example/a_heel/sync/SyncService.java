@@ -46,7 +46,7 @@ public class SyncService extends Service {
                     //fetch data and send
 
                     Survey survey = new SurveyRepository(getApplication()).FetchForSync();
-                    List<Question>questions = new QuestionsRepository(getApplication()).fetchReciew(survey.getId());
+                    List<Question>questions = new QuestionsRepository(getApplication()).fetchReciew(survey.getTitle());
                     UserProfile userProfile = new UserProfileReposittory(getApplication()).getUserProfilee(survey.getId());
 
                     WebInterface webInterface = new HttpUtil().getRetrofit().create(WebInterface.class);
@@ -54,13 +54,14 @@ public class SyncService extends Service {
                     call.enqueue(new Callback<String>() {
                         @Override
                         public void onResponse(Call<String> call, Response<String> response) {
-                            //handle
+                            //handle request update local records
 
                         }
 
                         @Override
                         public void onFailure(Call<String> call, Throwable t) {
                             //handle
+                            //handle request update local records
                         }
                     });
                 } else {

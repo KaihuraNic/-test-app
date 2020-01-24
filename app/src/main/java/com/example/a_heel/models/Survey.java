@@ -4,11 +4,11 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "survey")
+@Entity(tableName = "Survey")
 public class Survey {
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
+    @ColumnInfo(name = "Id")
     private int Id;
 
     @ColumnInfo(name = "title")
@@ -17,13 +17,14 @@ public class Survey {
     @ColumnInfo(name = "status")
     public int status;
 
-
-    @ColumnInfo(name = "syctatus")
+    @ColumnInfo(name = "syncStatus")
     private int syncStatus;
 
-    public Survey(int id, int status) {
-        Id = id;
+    public Survey(int Id, String title, int status, int syncStatus) {
+        Id = Id;
+        this.title = title;
         this.status = status;
+        this.syncStatus = syncStatus;
     }
 
     public int getId() {
@@ -33,7 +34,6 @@ public class Survey {
     public void setId(int id) {
         Id = id;
     }
-
 
     public String getTitle() {
         return title;
@@ -51,7 +51,7 @@ public class Survey {
         this.status = status;
     }
 
-    public int isSyncStatus() {
+    public int getSyncStatus() {
         return syncStatus;
     }
 

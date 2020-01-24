@@ -2,25 +2,38 @@ package com.example.a_heel.models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = " question")
 public class Question {
 
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = "Id")
     private int Id;
-
 
     @ColumnInfo(name = "answer")
     private String answer;
 
     @ColumnInfo(name = "surveyId")
-    private int surveyId;
+    private String surveyId;
 
-    @ColumnInfo(name = "answersOwner")
+    @ColumnInfo(name = "question")
+    private String question;
+
+    @ColumnInfo(name = "nationalIdOfInterViewee")
     private String nationalIdOfInterViewee;
+
+
+    public Question(int Id, String answer, String surveyId, String question, String nationalIdOfInterViewee) {
+        Id = Id;
+        this.answer = answer;
+        this.surveyId = surveyId;
+        this.question = question;
+        this.nationalIdOfInterViewee = nationalIdOfInterViewee;
+    }
+
 
 
     public int getId() {
@@ -39,16 +52,12 @@ public class Question {
         this.answer = answer;
     }
 
-    public int getSurveyId() {
+    public String getSurveyId() {
         return surveyId;
     }
 
-    public void setSurveyId(int surveyId) {
+    public void setSurveyId(String surveyId) {
         this.surveyId = surveyId;
-    }
-
-    public String getQuestion() {
-        return null;
     }
 
     public String getNationalIdOfInterViewee() {
@@ -57,5 +66,13 @@ public class Question {
 
     public void setNationalIdOfInterViewee(String nationalIdOfInterViewee) {
         this.nationalIdOfInterViewee = nationalIdOfInterViewee;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
     }
 }

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -28,13 +29,15 @@ import butterknife.ButterKnife;
 public class SurveryReviewActivity extends AppCompatActivity {
 
     private QuestionsViewModel questionsViewModel;
-    private List<Question> contextQuestions =  new ArrayList<>();
+    private List<Question> contextQuestions = new ArrayList<>();
     private Survey contextSurvey;
 
-    private final static  String FINAL_COMPLETE ="COMPLETE";
+    private final static String FINAL_COMPLETE = "COMPLETE";
 
     @BindView(R.id.form)
     LinearLayout form;
+    @BindView(R.id.holder)
+    LinearLayout holder;
     @BindView(R.id.finish)
     Button finish;
 
@@ -48,13 +51,22 @@ public class SurveryReviewActivity extends AppCompatActivity {
         contextSurvey = new Gson().fromJson(intent.getStringExtra("content"), Survey.class);
 
         questionsViewModel = ViewModelProviders.of(SurveryReviewActivity.this).get(QuestionsViewModel.class);
-        contextQuestions =  questionsViewModel.fetchReview(contextSurvey.getId());
+        contextQuestions = questionsViewModel.fetchReview(contextSurvey.getTitle());
+
+        loadQuestion();
+
+        finish.setVisibility(View.VISIBLE);
+        finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SurveryReviewActivity.this, MainActivity.class));
+            }
+        });
     }
 
     private void loadQuestion() {
         for (final Question question : contextQuestions) {
-            LinearLayout holder = new LinearLayout(SurveryReviewActivity.this);
-            holder.setBackgroundColor(getResources().getColor(R.color.dark_grey));
+
 
 
             TextView title = new TextView(SurveryReviewActivity.this);
@@ -64,17 +76,20 @@ public class SurveryReviewActivity extends AppCompatActivity {
             title.setGravity(Gravity.LEFT);
             holder.addView(title);
 
+            setMargin(title,5,5,5,5);
+
             final EditText answer = new EditText(SurveryReviewActivity.this);
             answer.setWidth(400);
-            answer.setHeight(40);
-            answer.setText(question.getSurveyId());
+            answer.setHeight(90);
+            answer.setText(question.getAnswer());
             answer.setHintTextColor(Color.RED);
             answer.setGravity(Gravity.LEFT);
             holder.addView(answer);
+            setMargin(answer,5,5,10,5);
 
 
             Button button = new Button(SurveryReviewActivity.this);
-            button.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            button.setBackgroundResource(R.drawable.button_bg);
             button.setText("Save");
             button.setWidth(400);
             button.setHeight(40);
@@ -88,28 +103,37 @@ public class SurveryReviewActivity extends AppCompatActivity {
             });
 
             holder.addView(button);
+            setMargin(button,20,20,5,5);
 
 
-            form.addView(holder);
+            View v  = new View(SurveryReviewActivity.this);
+            v.setMinimumHeight(1);
+            v.setBackgroundColor(getResources().getColor(R.color.dark_grey));
+            holder.addView(v);
+            setMargin(button,5,5,5,20);
+
 
         }
     }
 
+    public static void setMargin(View view, int left, int right, int top, int bottom) {
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams)
+                view.getLayoutParams();
+        params.setMargins(left, top, right, bottom);
+        view.setLayoutParams(params);
+    }
 
     private void saveChanges(Question question, String toString) {
-        if (question.getId() == contextQuestions.size() - 1) {
+        try {
+            if (question.getId() == contextQuestions.size() - 1) {
 
-            questionsViewModel.saveQuestion(FINAL_COMPLETE,question, toString);
+                questionsViewModel.saveQuestion(FINAL_COMPLETE, question, toString);
 
-            finish.setVisibility(View.VISIBLE);
-            finish.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(SurveryReviewActivity.this, MainActivity.class));
-                }
-            });
-        } else {
-            questionsViewModel.saveQuestion("",question, toString);
+            } else {
+                questionsViewModel.saveQuestion("", question, toString);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

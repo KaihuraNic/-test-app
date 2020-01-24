@@ -21,20 +21,20 @@ public class QuestionsRepository {
         serveyDao = database.geSurveyDao();
     }
 
-    public List<Question> getQuestions(int status) {
+    public List<Question> getQuestions(String status) {
         return questionDao.getQuestions(status);
     }
 
     public void saveQuestion(String finalComplete, Question question, String answer) {
         if (finalComplete.equalsIgnoreCase("finalComplete")) {
-            questionDao.saveAnswer(question.getId(), answer);
+            questionDao.saveAnswer(question.getQuestion(), answer);
             serveyDao.updateServey(completed_survey, question.getSurveyId());
         } else {
-            questionDao.saveAnswer(question.getId(), answer);
+            questionDao.saveAnswer(question.getQuestion(), answer);
         }
     }
 
-    public List<Question> fetchReciew(int surveyId) {
+    public List<Question> fetchReciew(String surveyId) {
         return questionDao.fetchPreview(surveyId);
     }
 }

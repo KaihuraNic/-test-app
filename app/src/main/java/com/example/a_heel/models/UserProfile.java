@@ -3,12 +3,13 @@ package com.example.a_heel.models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "user")
 public class UserProfile {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = "Id")
     private int Id;
 
@@ -27,6 +28,16 @@ public class UserProfile {
 
     @ColumnInfo(name = "surveyId")
     private int surveyId;
+
+
+    public UserProfile(int Id, String firstName, String lastName, String nationalIdNo, String photo, int surveyId) {
+        Id = Id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.nationalIdNo = nationalIdNo;
+        this.photo = photo;
+        this.surveyId = surveyId;
+    }
 
     public int getId() {
         return Id;

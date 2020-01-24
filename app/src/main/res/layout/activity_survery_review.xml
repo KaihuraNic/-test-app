@@ -6,13 +6,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".SurveryReviewActivity">
-
-
-    <LinearLayout
-        android:layout_height="match_parent"
+    <TextView
+        android:layout_height="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_weight="4">
-    </LinearLayout>
+        android:text="Survey Review"
+        android:layout_gravity="top"
+        android:gravity="center"
+        android:background="@color/dark_grey"/>
+
     <ScrollView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
@@ -23,13 +24,13 @@
             android:orientation="vertical"
             android:layout_weight="1">
             <include layout="@layout/questions_form"/>
-            <Button
-                android:id="@+id/finish"
-                android:layout_weight="4"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:background=""/>
         </LinearLayout>
     </ScrollView>
-
+    <Button
+        android:id="@+id/finish"
+        android:layout_weight="4"
+        android:text="finish"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="@drawable/button_bg"/>
 </LinearLayout>

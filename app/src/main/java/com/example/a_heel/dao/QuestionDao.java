@@ -18,11 +18,12 @@ public interface QuestionDao {
     void create(Question question);
 
     @Query("select * from ` question` where surveyId =:surveyId")
-    List<Question> getQuestions(int surveyId);
+    List<Question> getQuestions(String surveyId);
 
-    @Query("update ` question` set answer =:answer where Id =:id")
-    void saveAnswer(int id, String answer);
+    @Query("update ` question` set answer =:answer where question =:tittl")
+    void saveAnswer(String tittl , String answer);
 
     @Query("select * from ` question` where surveyId =:surveyId")
-    List<Question> fetchPreview(int surveyId);
+    List<Question> fetchPreview(String surveyId);
+
 }
