@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.a_heel">
+    package="com.dataprod.a_heel">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -15,16 +15,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SurveryReviewActivity"
+            android:name="dataprod.SurveryReviewActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".UserProfileAcivity"
+            android:name="dataprod.UserProfileAcivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".QuestionBaseActivity"
+            android:name="dataprod.QuestionBaseActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".MainActivity"
+            android:name="dataprod.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".sync.SyncService" />
+        <service android:name="dataprod.sync.SyncService" />
     </application>
 
 </manifest>
